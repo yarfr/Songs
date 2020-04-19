@@ -1,0 +1,21 @@
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    let page = <%= @page_number%>
+    //open page and align right
+    const PAGE_WIDTH = 496;
+    let zoom = window.innerWidth / 3;
+    let scrollLeft = Math.round(PAGE_WIDTH*35/31 - zoom/4);
+    let scrollTop = 10;
+
+    let songs = document.getElementById('songs')
+    songs.src = "pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&page=" + page + "&zoom=" + zoom + "," + scrollLeft + ","+ scrollTop;
+    document.body.onkeypress = function() {
+        console.log("asd");
+        alert("ppp");
+    //     let songs = document.getElementById('songs')
+    // songs.src = "pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&page=" + page + "&zoom=" + zoom + "," + scrollLeft + ","+ scrollTop;
+    };
+});
+
+</script>
+<embed id="songs" dir="rtl" type="application/pdf" width="100%" height="100%" />

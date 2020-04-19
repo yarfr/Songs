@@ -1,0 +1,84 @@
+<script>
+function myFunction() {
+  // Declare variables
+  let input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("songs_list");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+
+function mySubmit(page) {
+  $("#page_field")[0].value=page
+  $("#form").submit();
+}
+
+$( "#songs_list" ).ready(function() {
+  $('.queue_text').each(function (index) {
+    let q = $(this).attr('queue');
+    if (q) {
+      updateQueueText($(this), q)
+    }
+  });
+});
+
+function updateQueueText(elem, q) {
+  if (q > 1) {
+    elem.text("(בעוד " + q + " שירים)");
+  } else if (q == 1) {
+    elem.text("(הבא)");
+  } else if (q == 0) {
+    elem.text("(עכשיו)");
+  } else { // q < 0
+    elem.text("(נוגן)");
+  }
+}
+
+</script>
+
+<!-------------------------------------->
+
+<input type="search" id="myInput" onkeyup="myFunction()" placeholder="חיפוש שם או אומן...">
+
+<ul id="optionsBar">
+  <li><a href="/">סדר לפי שיר</a></li>
+  <li><a href="byArtist">סדר לפי אומן</a></li>
+</ul>
+
+
+  <ul id="songs_list">
+    <% @songs.each do |song| %>
+      <li>
+        <% queued = song['queue'] && song['queue'] >= 0 %>
+        <% css_class = song['queue'] ? "requested" : "" %>
+        <% q_number = queued && song['queue'] >= 0 ? song['queue'] : "" %>
+        <% q_visibility = queued && song['queue'] >= 0? "visible" : "collapse" %>
+        <% title_class = $by_title ? "bold" : ""%>
+        <% artist_class = $by_title ? "" : "bold"%>
+        <%= link_to "request/#{song['page']}",
+          id: "song_#{song['page']}",
+          class: "#{css_class}",
+          queue: song['queue'],
+          :data => {:confirm => "לבקש את השיר \"#{song['title']} - #{song['artist']}?\""},
+          remote: true, method: :post do %>
+          <% if $by_title %>
+            <b><%= "#{song['title']}" %></b> - <%= "#{song['artist']}" %>
+          <% else %>
+            <b><%= "#{song['artist']}" %></b> - <%= "#{song['title']}" %>
+          <% end %>
+          <span class='queue_text' queue='<%= song['queue'] %>'></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>

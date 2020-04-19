@@ -1,0 +1,118 @@
+<script>
+function myFunction() {
+  // Declare variables
+  let input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+
+function mySubmit(page) {
+  $("#page_field")[0].value=page
+  $("#form").submit();
+}
+
+// function sortList(ulId){
+//     ul = document.getElementById(ulId)
+//     console.log(ul.getElementsByTagName('li').length);
+//     let new_ul = ul.cloneNode(false);
+
+//     // Add all lis to an array
+//     var lis = [];
+//     for(var i = ul.childNodes.length; i--;){
+//         if(ul.childNodes[i].nodeName === 'LI')
+//             lis.push(ul.childNodes[i]);
+//     }
+
+//     // Sort the lis in descending order
+//     lis.sort(function(a, b){
+//        return parseInt(b.childNodes[0].data , 10) - 
+//               parseInt(a.childNodes[0].data , 10);
+//     });
+
+//     if (window.title_desc) {
+//       lis.reverse();
+//     }
+
+//     window.title_desc = !window.title_desc;
+
+//     // Add them into the ul in order
+//     for(var i = 0; i < lis.length; i++) {
+//         new_ul.appendChild(lis[i]);
+//     }
+//     // ul.parentNode.replaceChild(new_ul, ul);
+//     ul.parentNode.removeChild(ul);
+// }
+
+function sortList(ulId){
+    ul = $('#'+ulId);
+    console.log(ul);
+
+    var arr = $.makeArray(ul.children("li"));
+
+    arr.sort(function(a, b) {
+        var textA = +$(a).text();
+        var textB = +$(b).text();
+
+        if (textA < textB) return 1;
+        if (textA > textB) return -1;
+
+        return 0;
+    });
+
+    ul.empty();
+
+    $.each(arr, function() {
+        ul.append(this);
+    });
+
+
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  window.title_desc = true;
+
+});
+
+function sortByTitle() {
+   document.getElementById("byTitle").style.display='none'
+   document.getElementById("byArtist").style.display='block'
+}
+
+
+
+</script>
+<!-------------------------------------->
+<input type="search" id="myInput" onkeyup="myFunction()" placeholder="חיפוש שם או אומן...">
+
+<ul id="optionsBar">
+  <li><a href="" onclick="sortByTitle()">סדר לפי שיר</a></li>
+  <li><a href="">סדר לפי אומן</a></li>
+</ul>
+
+<%= form_with id: "form", url: "request/", method: :post, local: true do |form| %>
+  <%= hidden_field(:song, :page, id: "page_field") %>
+  <ul id="byTitle" class="songs_list">
+    <% @songs_by_title.each do |song| %>
+      <li title="<%= song['title'] %>" artist="<%= song['artist'] %>"><a href="" onclick="mySubmit(<%= song['page'] %>)"><b><%= song["title"] %></b> - <%= song["artist"] %></a></li>
+    <% end %>
+  </ul>
+
+  <ul id="byArtist" class="songs_list" hidden>
+    <% @songs_by_artist.each do |song| %>
+      <li title="<%= song['title'] %>" artist="<%= song['artist'] %>"><a href="" onclick="mySubmit(<%= song['page'] %>)"><b><%= song["artist"] %></b> - <%= song["title"] %></a></li>
+    <% end %>
+  </ul>
+<% end %>

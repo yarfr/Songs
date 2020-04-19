@@ -1,0 +1,69 @@
+<script>
+function myFunction() {
+  // Declare variables
+  let input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+
+function mySubmit(page) {
+  $("#page_field")[0].value=page
+  $("#form").submit();
+}
+
+$( document ).ready(function() {
+  $('.queue_number').each(function (index) {
+      let q = $(this).text();
+      if (q) {
+        $(this).text(q - 1)
+      }
+      if (q <= 0) {
+        $(this).closest('.queue_text').text('(נוגן)');
+      }
+    });
+});
+
+</script>
+
+<!-------------------------------------->
+
+<input type="search" id="myInput" onkeyup="myFunction()" placeholder="חיפוש שם או אומן...">
+
+<ul id="optionsBar">
+  <li><a href="/">סדר לפי שיר</a></li>
+  <li><a href="byArtist">סדר לפי אומן</a></li>
+</ul>
+
+
+  <ul id="songs_list">
+    <% @songs.each do |song| %>
+      <li>
+        <% queued = song['queue'] && song['queue'] >= 0 %>
+        <% css_class = song['queue'] ? "requested" : "" %>
+        <% q_number = queued && song['queue'] >= 0 ? song['queue'] : "" %>
+        <% q_visibility = queued && song['queue'] >= 0? "visible" : "collapse" %>
+        <%= link_to "request/#{song['page']}",
+          id: "song_#{song['page']}",
+          class: "#{css_class}",
+          remote: true, method: :post do %>
+          <b><%= "#{song['title']}" %></b> - <%= "#{song['artist']}" %>
+          <span class='queue_text' style="visibility:<%= q_visibility %>">
+          (בעוד <span class='queue_number'><%= q_number %></span> שירים)
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>

@@ -1,0 +1,96 @@
+html {
+  // background-color: lightblue;
+  direction: rtl;
+}
+body {
+  // background-color: lightblue;
+}
+
+#myInput {
+  background: white url("searchicon.png") no-repeat right 10px center;
+  font-size: 18px; /* Increase font-size */
+  padding: 12px 40px 12px 20px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  // border: 2px solid #777; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+  width: 100%; /* Full-width */
+  box-sizing: border-box;
+  display: block;
+  box-shadow: #666 4px 4px 5px;
+}
+
+#songs_list {
+  /* Remove default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: #666 2px 2px 5px;
+}
+
+#songs_list li a {
+  border: 1px solid #ddd; /* Add a border to all links */
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Grey background color */
+  padding: 12px; /* Add some padding */
+  text-decoration: none; /* Remove default text underline */
+  font-size: 18px; /* Increase the font-size */
+  // color: black; /* Add a black text color */
+  display: block; /* Make it into a block element to fill the whole list */
+}
+
+#songs_list li a:hover:not(.header) {
+  background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+
+.queue_text {
+  font-size: 12px;
+  color: #666;
+}
+
+#songs_list li a:not(.requested) {
+  color: #000;
+}
+
+#songs_list li a.requested {
+  pointer-events: none;
+  cursor: default;
+    color: #666;
+}
+
+#optionsBar {
+  /* Remove default list styling */
+
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333333;
+}
+
+#optionsBar > li {
+  display: inline-block;
+  /* this fix is needed for IE7- */
+  *display: inline;
+}
+
+#optionsBar li a {
+  // border: 1px solid #ddd; /* Add a border to all links */
+  // margin-top: -1px; /* Prevent double borders */
+  // background-color: #f6f6f6; /* Grey background color */
+  // padding: 12px; /* Add some padding */
+  // text-decoration: none; /* Remove default text underline */
+  // font-size: 18px; /* Increase the font-size */
+  // color: black; /* Add a black text color */
+  // display: block; /* Make it into a block element to fill the whole list */
+
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  display: list-item;
+  text-align: -webkit-match-parent;
+}
+#optionsBar li a:hover {
+  background-color: #111111;
+}

@@ -1,0 +1,38 @@
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        let visibility = <%= @show_message %> ? "visible" : "hidden";
+        $('#message').css("visibility", visibility);
+        $('#message').fadeOut(5000);
+
+        document.body.onkeypress = function (e) {
+            let keycode;
+
+            if (window.event) { // IE                    
+                keycode = e.keyCode;
+            } else if (e.which) { // Netscape/Firefox/Opera                   
+                keycode = e.which;
+            } else {
+                console.log("Couldn't recognize pressed key");
+            }
+
+            key = String.fromCharCode(keycode);
+
+            if (key === 'n' || key === 'N' || key === 'מ') {
+                console.log("Going to next song");
+                window.location.replace('/songs/next');
+            } else if (key === 'b' || key === 'B' || key === 'נ') {
+                console.log("Going to previous song");
+                window.location.replace('/songs/prev');
+            }
+        }
+    });
+</script>
+<br>
+<%= image_tag @image_path, id: 'page_img' %>
+<div id="bottom">
+<%= @page %> עמוד
+</div>
+<div id="message">
+    <h1><%= @message %></h1>
+</div>
